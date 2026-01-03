@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { ApiResponse, Column, Todo } from "../types";
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://task-kanban-rho.vercel.app/";
 
 const api = axios.create({
     baseURL: API_URL,
