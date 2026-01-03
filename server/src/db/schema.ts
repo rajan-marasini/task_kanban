@@ -17,7 +17,7 @@ export const columns = pgTable("columns", {
     createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const tasks = pgTable("tasks", {
+export const todo = pgTable("todos", {
     id: uuid("id").defaultRandom().primaryKey(),
 
     columnId: uuid("column_id")

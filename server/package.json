@@ -5,7 +5,7 @@
     "private": true,
     "scripts": {
         "start": "bun run src/index.ts",
-        "dev": "bun run --hot src/index.ts",
+        "dev": "bun run --watch src/index.ts",
         "db:push": "bunx drizzle-kit push",
         "db:seed": "bun run src/db/scripts/seed.ts",
         "db:studio": "bunx drizzle-kit studio"
