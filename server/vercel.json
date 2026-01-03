@@ -1,18 +1,7 @@
 {
-    "version": 2,
-    "builds": [
-        {
-            "src": "src/index.ts",
-            "use": "@vercel/node",
-            "config": {
-                "tsconfig": "tsconfig.vercel.json"
-            }
+    "functions": {
+        "api/index.ts": {
+            "runtime": "nodejs24.x"
         }
-    ],
-    "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "src/index.ts"
-        }
-    ]
+    }
 }

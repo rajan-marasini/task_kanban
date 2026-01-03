@@ -4,13 +4,12 @@ import express from "express";
 import morgan from "morgan";
 
 import { eq } from "drizzle-orm";
-import { db } from "./db/index";
-import { columns, todo } from "./db/schema";
+import { db } from "../db/index";
+import { columns, todo } from "../db/schema";
 
 dotenv.config();
 
 const app = express();
-const PORT = Number(process.env.PORT) || 3000;
 
 app.use(cors());
 app.use(morgan("dev"));
@@ -26,12 +25,8 @@ app.get("/", (_req, res) => {
 app.get("/columns", async (_req, res) => {
     try {
         const result = await db.select().from(columns);
-
-        res.status(200).json({
-            success: true,
-            data: result,
-        });
-    } catch (error) {
+        res.status(200).json({ success: true, data: result });
+    } catch {
         res.status(500).json({
             success: false,
             message: "Failed to fetch columns",
@@ -42,12 +37,8 @@ app.get("/columns", async (_req, res) => {
 app.get("/todos", async (_req, res) => {
     try {
         const todos = await db.select().from(todo);
-
-        res.status(200).json({
-            success: true,
-            data: todos,
-        });
-    } catch (error) {
+        res.status(200).json({ success: true, data: todos });
+    } catch {
         res.status(500).json({
             success: false,
             message: "Failed to fetch todos",
@@ -63,16 +54,12 @@ app.get("/todos/:id", async (req, res) => {
             .where(eq(todo.id, req.params.id));
 
         if (!task) {
-            return res.status(404).json({
-                success: false,
-                message: "Todo not found",
-            });
+            return res
+                .status(404)
+                .json({ success: false, message: "Todo not found" });
         }
 
-        res.status(200).json({
-            success: true,
-            data: task,
-        });
+        res.status(200).json({ success: true, data: task });
     } catch {
         res.status(500).json({
             success: false,
@@ -102,10 +89,7 @@ app.post("/todos", async (req, res) => {
             })
             .returning();
 
-        res.status(201).json({
-            success: true,
-            data: task,
-        });
+        res.status(201).json({ success: true, data: task });
     } catch {
         res.status(500).json({
             success: false,
@@ -115,44 +99,20 @@ app.post("/todos", async (req, res) => {
 });
 
 app.patch("/todos/:id", async (req, res) => {
-    const { title, description, columnId, position } = req.body;
-
-    if (
-        title === undefined &&
-        description === undefined &&
-        columnId === undefined &&
-        position === undefined
-    ) {
-        return res.status(400).json({
-            success: false,
-            message: "No fields provided for update",
-        });
-    }
-
     try {
         const [updated] = await db
             .update(todo)
-            .set({
-                ...(title !== undefined && { title }),
-                ...(description !== undefined && { description }),
-                ...(columnId !== undefined && { columnId }),
-                ...(position !== undefined && { position }),
-                updatedAt: new Date(),
-            })
+            .set({ ...req.body, updatedAt: new Date() })
             .where(eq(todo.id, req.params.id))
             .returning();
 
         if (!updated) {
-            return res.status(404).json({
-                success: false,
-                message: "Todo not found",
-            });
+            return res
+                .status(404)
+                .json({ success: false, message: "Todo not found" });
         }
 
-        res.status(200).json({
-            success: true,
-            data: updated,
-        });
+        res.status(200).json({ success: true, data: updated });
     } catch {
         res.status(500).json({
             success: false,
@@ -169,16 +129,12 @@ app.delete("/todos/:id", async (req, res) => {
             .returning();
 
         if (!deleted.length) {
-            return res.status(404).json({
-                success: false,
-                message: "Todo not found",
-            });
+            return res
+                .status(404)
+                .json({ success: false, message: "Todo not found" });
         }
 
-        res.status(200).json({
-            success: true,
-            message: "Todo deleted",
-        });
+        res.status(200).json({ success: true, message: "Todo deleted" });
     } catch {
         res.status(500).json({
             success: false,
@@ -187,10 +143,8 @@ app.delete("/todos/:id", async (req, res) => {
     }
 });
 
-if (process.env.NODE_ENV !== "production") {
-    app.listen(PORT, () => {
-        console.log(`✅ Server running on http://localhost:${PORT}`);
-    });
-}
-
+/**
+ * ❌ DO NOT call app.listen()
+ * ✅ Export app for Vercel
+ */
 export default app;
