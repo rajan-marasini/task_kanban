@@ -4,7 +4,7 @@ import express from "express";
 import morgan from "morgan";
 
 import { eq } from "drizzle-orm";
-import { db } from "./db";
+import { db } from "./db/index";
 import { columns, todo } from "./db/schema";
 
 dotenv.config();
