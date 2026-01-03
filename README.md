@@ -34,7 +34,6 @@ A full-stack Kanban board application built with React, Node.js, and PostgreSQL.
 
 ## 📋 Prerequisites
 
--   [Bun](https://bun.sh/) (v1.0 or higher)
 -   [PostgreSQL](https://www.postgresql.org/) running locally
 -   Node.js (v18+)
 
@@ -57,25 +56,25 @@ Navigate to the server directory and install dependencies:
 
 ```bash
 cd server
-bun install
+npm install
 ```
 
 Push the schema to the database:
 
 ```bash
-bun db:push
+npm run db:push
 ```
 
 Seed the database with default columns:
 
 ```bash
-bun db:seed
+npm run  db:seed
 ```
 
 Start the server:
 
 ```bash
-bun dev
+npm run dev
 ```
 
 The server will start on `http://localhost:3000`.

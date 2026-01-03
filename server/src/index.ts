@@ -4,10 +4,12 @@ import express from "express";
 import morgan from "morgan";
 
 import { eq } from "drizzle-orm";
-import { db } from "./db/index";
+import { db } from "./db";
 import { columns, todo } from "./db/schema";
 
 dotenv.config();
+
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
@@ -143,8 +145,6 @@ app.delete("/todos/:id", async (req, res) => {
     }
 });
 
-/**
- * ❌ DO NOT call app.listen()
- * ✅ Export app for Vercel
- */
-export default app;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
