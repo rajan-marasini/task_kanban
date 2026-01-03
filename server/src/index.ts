@@ -5,7 +5,7 @@ import morgan from "morgan";
 
 import { eq } from "drizzle-orm";
 import { db } from "./db";
-import { todo } from "./db/schema";
+import { columns, todo } from "./db/schema";
 
 dotenv.config();
 
@@ -21,6 +21,22 @@ app.get("/", (_req, res) => {
         success: true,
         message: "API running 🚀",
     });
+});
+
+app.get("/columns", async (_req, res) => {
+    try {
+        const result = await db.select().from(columns);
+
+        res.status(200).json({
+            success: true,
+            data: result,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch columns",
+        });
+    }
 });
 
 app.get("/todos", async (_req, res) => {
